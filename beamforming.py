@@ -19,11 +19,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 np.set_printoptions(precision=3)
-def H(A, **kwargs):
-    return np.transpose(A,**kwargs).conj()
 
 #%%[markdwon]
-# ##Parameter
+# ## Parameter
 
 #%%
 varphi = 45 / 180 * np.pi # Angle of attack of the Source S(\Omega) in relation to the mic array 
@@ -34,7 +32,7 @@ fs = 16000 # Sample rate
 
 n_fft = 512 # Fourier Transform length
 n_spec = 257 # Number of frequency bins 
-n_dir = 72 # Number of directions which the steering vector is steered to
+n_dir = 180 # Number of directions which the steering vector is steered to
 
 #%%[markdown]
 # ##Microphone Positions
@@ -72,11 +70,12 @@ plt.xlabel("Frequency [Bin]")
 # The plot shows the angle of the complex spectral time delays from the desired signal between reference microphone 1 and the others. for higher frequencys you see that the angle is growing due to the faster swinging of the signal. This means for the same time delay different frequencys have different phase differences between two microphones. 
 
 
-# ## Acoustic Sound Localization
-# Acoustic sound localization is the task of locating a sound source given measurements of the sound field. ...
+# ## Delay and Sum Beamformer
+# ...
 # ## Calculate the steering vectors W_H for the localization:
 
-angle_array = np.c_[0:360:5]/180*np.pi
+#%%
+angle_array = np.c_[0:360:360/n_dir]/180*np.pi
 tau_steering = (pos_x*np.cos(angle_array)+pos_y*np.sin(angle_array))/c
 tau_steering = tau_steering.T.copy()
 tau_steering = tau_steering.reshape([mic,1,1,n_dir])
@@ -107,6 +106,8 @@ phi_xx = A_ff_H * A_ff
 df = pd.DataFrame(phi_xx[:,:,50])
 df.style.format('{:,.2f}'.format)
 
+# ## Acoustic Sound Localization
+# Acoustic sound localization is the task of locating a sound source given measurements of the sound field. ...
 #%%
 power_steered = np.zeros((n_spec,n_dir))
 for iDir in range(n_dir):
