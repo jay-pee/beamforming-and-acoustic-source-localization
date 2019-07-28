@@ -117,7 +117,10 @@ for iDir in range(n_dir):
 
 #%%
 plt.figure(1)
-plt.imshow(power_steered, aspect='auto', origin='lower')
+plt.imshow(power_steered, aspect='auto', origin='lower',extent=[0,360,0,8])
+plt.xticks(np.r_[0.:361:45])
+plt.ylabel('Frequency [kHz]')
+plt.xlabel('Steering Direction [Deg]')
 plt.show()
 
 # with pd.option_context('display.precision', 3):
@@ -128,3 +131,6 @@ plt.show()
 # print(df)
 
 
+
+
+#%%
